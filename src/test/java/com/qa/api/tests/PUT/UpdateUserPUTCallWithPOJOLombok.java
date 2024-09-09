@@ -97,19 +97,7 @@ public class UpdateUserPUTCallWithPOJOLombok {
         JsonNode node2= mapper1.readTree(getResponse.body());
         System.out.println("the updated status is "+node2.get("status").asText());
         Assert.assertEquals(node2.get("status").asText(),"inactive");
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+}
     private String getRandomEmail() {
         String email="TestAutomation"+System.currentTimeMillis()+"@gmail.com";
         return email;
