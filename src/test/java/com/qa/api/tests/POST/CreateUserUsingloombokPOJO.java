@@ -1,6 +1,6 @@
-package com.qa.api.tests;
+package com.qa.api.tests.POST;
 
-import com.api.Data.Users;
+import com.api.Data.UserLoombok;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.APIRequest;
@@ -13,11 +13,10 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
-public class CreateDataUsingPOJOTest {
+public class CreateUserUsingloombokPOJO {
+
     Playwright playwright;
     APIRequest apiRequest;
     APIRequestContext apiContext;
@@ -36,8 +35,12 @@ public class CreateDataUsingPOJOTest {
     }
 
     @Test
-    public void createUserTest() throws IOException {
-        Users user=new Users("SagarRawat","Sagarrawar0911@gmail.com","male","active");
+    public void createUser() throws IOException {
+        UserLoombok user=UserLoombok.builder()
+                .name("Sagarrawat")
+                .email("Safadas@gmail.com")
+                .gender("male")
+                .status("active").build();
 
         APIResponse postapiResponse = apiContext.post("https://gorest.co.in/public/v2/users",
                 RequestOptions.create()
@@ -55,21 +58,18 @@ public class CreateDataUsingPOJOTest {
         //fetch id from response
         String userId = postjsonreposne.get("id").asText();
         System.out.println("userid is " + userId);
-        String responseText=postapiResponse.text();
+        String responseText = postapiResponse.text();
 
-//        change response text into json-deserilaization
-        ObjectMapper objectMapper1=new ObjectMapper();
-//        new user for reponse
-        Users responsetextde=objectMapper1.readValue(responseText,Users.class);
+        //        change response text into json-deserilaization
+        ObjectMapper objectMapper1 = new ObjectMapper();
+        //        new user for reponse
+        UserLoombok responsetextde = objectMapper1.readValue(responseText, UserLoombok.class);
         System.out.println("actual user created from response ");
         System.out.println(responsetextde);
 
-        Assert.assertEquals(responsetextde.getName(),user.getName());
-        Assert.assertEquals(responsetextde.getEmail(),user.getEmail());
-        Assert.assertEquals(responsetextde.getGender(),user.getGender());
-        Assert.assertEquals(responsetextde.getStatus(),user.getStatus());
-
-
-
+        Assert.assertEquals(responsetextde.getName(), user.getName());
+        Assert.assertEquals(responsetextde.getEmail(), user.getEmail());
+        Assert.assertEquals(responsetextde.getGender(), user.getGender());
+        Assert.assertEquals(responsetextde.getStatus(), user.getStatus());
     }
 }
